@@ -24,6 +24,7 @@ function LoginForm() {
         </div>
         <button type="submit">Login</button>
         </form>
+        <div>Recordarme</div>
         <div>¿Olvidaste Tus datos? Obtener ayuda</div>
         <div>¿No recordas tu contraseña? Recuperar</div>
     </div>

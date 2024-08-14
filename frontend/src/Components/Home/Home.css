@@ -7,9 +7,18 @@
 
 .sidebar {
   grid-column: span 2;
-  background-color: #84b4e4;
-  padding: 15px;
+  background-color: #3d90e4;
+  padding: 15px 15px 10px 8px;
   
+}
+
+.sidebar .nav-link {
+  color: black !important; /* Cambia el color de los enlaces a negro */
+  font-size: 1.25em;
+}
+
+.sidebar .nav-link:hover {
+  color: #333 !important; /* Cambia el color al pasar el mouse por encima */
 }
 
 .bottons-home{
@@ -18,11 +27,11 @@
 
 .main-content {
   grid-column: span 10;
-  background-color: #ff9b9b;
+  background-color: var(--ligth-color);
   padding: 15px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 760px) {
   .sidebar {
     grid-column: span 12;
 
