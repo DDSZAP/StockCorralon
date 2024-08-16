@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function LoginForm() {
+export default function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -22,7 +22,7 @@ function LoginForm() {
             <label>Password:</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Ingresar</button>
         </form>
         <div>Recordarme</div>
         <div>¿Olvidaste Tus datos? Obtener ayuda</div>
@@ -30,4 +30,3 @@ function LoginForm() {
     </div>
   );
 }
-
