@@ -8,8 +8,6 @@
     sans-serif;
 }
 
-/* Colors */
-
 :root {
     --primary-color: #C1D101;
     --secundary-color: #1E2F58;
@@ -20,7 +18,7 @@
 }
 
 .App{
-    font-family:sans-serif;
+    font-family: 'roboto', sans-serif;
     font-size: var(--tamaño-fuente);
     background-color: var(--alternative-color);
 }
@@ -28,4 +26,3 @@
 a{
     text-decoration: none;
 }
-

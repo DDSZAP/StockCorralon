@@ -4,8 +4,7 @@ import Button from 'react-bootstrap/Button';
 import './Home.css';
 import { FaBox, FaBuilding, FaArrowDown, FaArrowUp, FaClipboardList, FaFileAlt,FaPlus } from 'react-icons/fa';
 import ListadoDisponibilidad from '../ListadoDisponibilidad/ListadoDisponibilidad.jsx';
-
-
+import {Link} from 'react-router-dom'
 
 export default function Home() {
     const[items,setItems] = useState([
@@ -29,7 +28,7 @@ export default function Home() {
  <aside className="sidebar">
       <h2 className='titulo-slidebar'>Home</h2>
       <Nav className="flex-column">
-        <Nav.Link href="#items">
+        <Nav.Link as={Link} to="/Items">
           <FaBox className="me-2" /> {/* Ícono de caja para "Items" */}
           Items
         </Nav.Link>

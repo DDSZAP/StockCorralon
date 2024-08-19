@@ -8,16 +8,15 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Image from 'react-bootstrap/Image';
 import logo from './Logonav.png'; // Importa el logo desde la misma carpeta
 import './Navbar.css';
+import {Link} from 'react-router-dom';
+
 
 function NavBar() {
-
-
-
   
   return (
     <Navbar expand="lg"  className='navbar'>
       <Container fluid>
-        <Navbar.Brand href="/Home">
+        <Navbar.Brand as={Link} to="/">
           <Image
             src={logo} // Utiliza la ruta relativa del logo importado
             alt="Logo"
@@ -39,15 +38,13 @@ function NavBar() {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="/home">Home</Nav.Link>
-            <Nav.Link href="#action2"></Nav.Link>
+            <Nav.Link as={Link} to="/">Home</Nav.Link>
             <NavDropdown title="Items" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/Items">Ver Items</NavDropdown.Item>
               <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="#action2"></Nav.Link>
             <NavDropdown title="Entrada" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
