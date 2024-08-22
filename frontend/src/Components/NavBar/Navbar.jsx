@@ -40,10 +40,11 @@ function NavBar() {
           >
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <NavDropdown title="Items" id="navbarScrollingDropdown">
-              <NavDropdown.Item as={Link} to="/Items">Ver Items</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/Items">Lista Items</NavDropdown.Item>
+              <NavDropdown.Item href="#action4">Categorías</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
+              <NavDropdown.Item href="#action5">Entidades</NavDropdown.Item>
+              <NavDropdown.Item href="#action5">Personas</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Entrada" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>

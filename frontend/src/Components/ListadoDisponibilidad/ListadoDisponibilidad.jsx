@@ -1,28 +1,87 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table, Button } from "react-bootstrap";
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 import './ListadoDisponibilidad.css'; // Asegúrate de agregar los estilos CSS
 
 export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDelete }) {
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+    const sortedItems = [...ItemsDisponibles].sort((a, b) => {
+        if (sortConfig.key) {
+            let aKey = a[sortConfig.key];
+            let bKey = b[sortConfig.key];
+
+            // Verifica si el valor es un número
+            if (typeof aKey === 'number' && typeof bKey === 'number') {
+                if (aKey < bKey) {
+                    return sortConfig.direction === 'asc' ? -1 : 1;
+                }
+                if (aKey > bKey) {
+                    return sortConfig.direction === 'asc' ? 1 : -1;
+                }
+            } else {
+                // Si no es un número, es una cadena de texto
+                aKey = aKey.toString().toLowerCase();
+                bKey = bKey.toString().toLowerCase();
+                
+                if (aKey < bKey) {
+                    return sortConfig.direction === 'asc' ? -1 : 1;
+                }
+                if (aKey > bKey) {
+                    return sortConfig.direction === 'asc' ? 1 : -1;
+                }
+            }
+        }
+        return 0;
+    });
+
+    const requestSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const getSortIcon = (key) => {
+        if (sortConfig.key === key) {
+            return sortConfig.direction === 'asc' ? <FaSortUp /> : <FaSortDown />;
+        } else {
+            return <FaSort />;
+        }
+    };
+
     return (
-        <div className="table-responsive"> {/* Contenedor para hacer la tabla responsive */}
+        <div className="table-responsive mt-2"> {/* Contenedor para hacer la tabla responsive */}
             <h3>Listado Disponibilidad</h3>
             <Table striped bordered hover className="table-adaptable">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Nombre Item</th>
-                        <th>Descripción</th>
-                        <th>Stock</th>
-                        <th>Categoría</th>
-                        <th>Sub Categoría</th>
+                        <th onClick={() => requestSort('id')}>
+                            ID {getSortIcon('id')}
+                        </th>
+                        <th onClick={() => requestSort('nombre')}>
+                            Nombre Item {getSortIcon('nombre')}
+                        </th>
+                        <th onClick={() => requestSort('descripcion')}>
+                            Descripción {getSortIcon('descripcion')}
+                        </th>
+                        <th onClick={() => requestSort('stock')}>
+                            Stock {getSortIcon('stock')}
+                        </th>
+                        <th onClick={() => requestSort('categoria')}>
+                            Categoría {getSortIcon('categoria')}
+                        </th>
+                        <th onClick={() => requestSort('subcategoria')}>
+                            Sub Categoría {getSortIcon('subcategoria')}
+                        </th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {ItemsDisponibles.map((item, index) => (
+                    {sortedItems.map((item, index) => (
                         <tr key={index}>
-                            <td>{index + 1}</td>
+                            <td>{item.id}</td>
                             <td>{item.nombre}</td>
                             <td>{item.descripcion}</td>
                             <td>{item.stock}</td>
@@ -35,14 +94,14 @@ export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDe
                                     onClick={() => onModify(item)}
                                     className="me-2"
                                 >
-                                    <FaEdit className="" />            
+                                    <FaEdit />            
                                 </Button>
                                 <Button
                                     variant="danger" 
                                     size="sm" 
                                     onClick={() => onDelete(item.id)}
                                 >
-                                    <FaTrash className="" />                                    
+                                    <FaTrash />                                    
                                 </Button>
                             </td>
                         </tr>
