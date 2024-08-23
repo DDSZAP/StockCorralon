@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Table, Button } from "react-bootstrap";
 import { FaEdit, FaTrash, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
-import './ListadoDisponibilidad.css'; // Asegúrate de agregar los estilos CSS
+import './ListadoDisponibilidad.css';
 
 export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDelete }) {
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
@@ -11,7 +11,6 @@ export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDe
             let aKey = a[sortConfig.key];
             let bKey = b[sortConfig.key];
 
-            // Verifica si el valor es un número
             if (typeof aKey === 'number' && typeof bKey === 'number') {
                 if (aKey < bKey) {
                     return sortConfig.direction === 'asc' ? -1 : 1;
@@ -20,7 +19,6 @@ export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDe
                     return sortConfig.direction === 'asc' ? 1 : -1;
                 }
             } else {
-                // Si no es un número, es una cadena de texto
                 aKey = aKey.toString().toLowerCase();
                 bKey = bKey.toString().toLowerCase();
                 
@@ -52,7 +50,7 @@ export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDe
     };
 
     return (
-        <div className="table-responsive mt-2"> {/* Contenedor para hacer la tabla responsive */}
+        <div className="table-responsive mt-2">
             <h3>Listado Disponibilidad</h3>
             <Table striped bordered hover className="table-adaptable">
                 <thead>
@@ -79,8 +77,8 @@ export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDe
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedItems.map((item, index) => (
-                        <tr key={index}>
+                    {sortedItems.map((item) => (
+                        <tr key={item.id}>
                             <td>{item.id}</td>
                             <td>{item.nombre}</td>
                             <td>{item.descripcion}</td>
