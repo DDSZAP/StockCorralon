@@ -6,7 +6,7 @@ import { FaBox, FaBuilding, FaArrowDown, FaArrowUp, FaClipboardList, FaFileAlt, 
 import ListadoDisponibilidad from '../ListadoDisponibilidad/ListadoDisponibilidad.jsx';
 import { Link } from 'react-router-dom';
 
-export default function Home({ items, onModify, onDelete }) {
+export default function Home({ items, onModify, onDelete, searchTerm }) {
 
   return (
     <Container fluid className="grid-container">
@@ -50,10 +50,12 @@ export default function Home({ items, onModify, onDelete }) {
       <main className="main-content">
         <h1>Sistema de Stock General</h1>
         <div className='bottons-home'>
-          <Button variant="primary" className='m-1'>
-            <FaPlus className='me-2' />
-            Nueva Entrada
-          </Button>
+          <Link to="/entrada">
+            <Button variant="primary" className='m-1'>
+              <FaPlus className='me-2' />
+              Nueva Entrada
+            </Button>
+          </Link>
           <Button variant="primary" className='m-1'>
             <FaPlus className='me-2' />
             Nueva Salida
@@ -68,6 +70,7 @@ export default function Home({ items, onModify, onDelete }) {
             ItemsDisponibles={items}
             onModify={onModify}
             onDelete={onDelete}
+            searchTerm={searchTerm}
           />
         </div>
       </main>

@@ -42,6 +42,8 @@ export default function App() {
     { id: 30, nombre: 'Masilla', descripcion: 'Bote de masilla 1kg', stock: 100, categoria: 'Materiales', subcategoria: 'Pinturas' }
   ]);
   
+  const [searchTerm, setSearchTerm] = useState('');
+
   const handleAddItem = (newItem) => {
     const newId = items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1;
     const itemWithId = { ...newItem, id: newId };
@@ -51,11 +53,20 @@ export default function App() {
   const handleDelete = (id) => {
     setItems(items.filter(item => item.id !== id));
   };
+
+  const handleSearchChange = (term) => {
+    setSearchTerm(term);
+  };
+
+  const filteredItems = items.filter(item =>
+    item.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="App">
-      <NavBar/>
+      <NavBar searchTerm={searchTerm} onSearchChange={handleSearchChange} />
       <Routes>
-        <Route exact path='/' element={<Home items={items} onModify={() => {}} onDelete={handleDelete} />} />
+        <Route exact path='/' element={<Home items={filteredItems} onModify={() => {}} onDelete={handleDelete} />} />
         <Route exact path='/items' element={<Item />} />
         <Route exact path='/entrada' element={<Entrada onAddItem={handleAddItem} />} />
       </Routes>

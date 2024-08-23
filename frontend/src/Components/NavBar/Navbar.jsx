@@ -8,13 +8,11 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Image from 'react-bootstrap/Image';
 import logo from './Logonav.png'; // Importa el logo desde la misma carpeta
 import './Navbar.css';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-
-function NavBar() {
-  
+function NavBar({ searchTerm, onSearchChange }) {
   return (
-    <Navbar expand="lg"  className='navbar'>
+    <Navbar expand="lg" className='navbar'>
       <Container fluid>
         <Navbar.Brand as={Link} to="/">
           <Image
@@ -77,6 +75,8 @@ function NavBar() {
               placeholder="Nombre Item"
               className="me-2"
               aria-label="Search"
+              value={searchTerm}
+              onChange={(e) => onSearchChange(e.target.value)}
             />
             <Button variant="outline-success">Buscar</Button>
           </Form>
