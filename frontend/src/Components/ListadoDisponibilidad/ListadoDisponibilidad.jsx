@@ -1,37 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { Table, Button } from "react-bootstrap";
 import { FaEdit, FaTrash, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 import './ListadoDisponibilidad.css';
 
-export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDelete }) {
-    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDelete, searchTerm }) {
+    const [sortConfig, setSortConfig] = React.useState({ key: null, direction: 'asc' });
 
-    const sortedItems = [...ItemsDisponibles].sort((a, b) => {
+    const sortedItems = React.useMemo(() => {
+        let sortableItems = [...ItemsDisponibles];
         if (sortConfig.key) {
-            let aKey = a[sortConfig.key];
-            let bKey = b[sortConfig.key];
+            sortableItems.sort((a, b) => {
+                let aKey = a[sortConfig.key];
+                let bKey = b[sortConfig.key];
 
-            if (typeof aKey === 'number' && typeof bKey === 'number') {
-                if (aKey < bKey) {
-                    return sortConfig.direction === 'asc' ? -1 : 1;
+                if (typeof aKey === 'number' && typeof bKey === 'number') {
+                    return (sortConfig.direction === 'asc' ? aKey - bKey : bKey - aKey);
+                } else {
+                    aKey = aKey.toString().toLowerCase();
+                    bKey = bKey.toString().toLowerCase();
+                    return (sortConfig.direction === 'asc' ? aKey.localeCompare(bKey) : bKey.localeCompare(aKey));
                 }
-                if (aKey > bKey) {
-                    return sortConfig.direction === 'asc' ? 1 : -1;
-                }
-            } else {
-                aKey = aKey.toString().toLowerCase();
-                bKey = bKey.toString().toLowerCase();
-                
-                if (aKey < bKey) {
-                    return sortConfig.direction === 'asc' ? -1 : 1;
-                }
-                if (aKey > bKey) {
-                    return sortConfig.direction === 'asc' ? 1 : -1;
-                }
-            }
+            });
         }
-        return 0;
-    });
+        return sortableItems;
+    }, [ItemsDisponibles, sortConfig]);
 
     const requestSort = (key) => {
         let direction = 'asc';

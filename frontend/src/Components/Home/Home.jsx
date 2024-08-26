@@ -1,12 +1,28 @@
-import React from 'react';
-import { Container, Nav } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import './Home.css';
-import { FaBox, FaBuilding, FaArrowDown, FaArrowUp, FaClipboardList, FaFileAlt, FaPlus, FaUserCheck } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { Container, Nav, Button } from 'react-bootstrap';
+import { FaBox, FaBuilding, FaArrowDown, FaArrowUp, FaClipboardList, FaFileAlt, FaPlus, FaUserCheck,} from 'react-icons/fa';
 import ListadoDisponibilidad from '../ListadoDisponibilidad/ListadoDisponibilidad.jsx';
-import { Link } from 'react-router-dom';
+import EditItemModal from '../ModificarItem/ModificarItemModal.jsx';
+import { Link } from 'react-router-dom'; 
+import './Home.css';
 
 export default function Home({ items, onModify, onDelete, searchTerm }) {
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShow = (item) => {
+    setSelectedItem(item);
+    setShowModal(true);
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
+
+  const handleSave = (updatedItem) => {
+    onModify(updatedItem);
+    setSelectedItem(null);
+  };
 
   return (
     <Container fluid className="grid-container">
@@ -47,6 +63,7 @@ export default function Home({ items, onModify, onDelete, searchTerm }) {
           </Nav.Link>
         </Nav>
       </aside>
+  
       <main className="main-content">
         <h1>Sistema de Stock General</h1>
         <div className='bottons-home'>
@@ -68,12 +85,22 @@ export default function Home({ items, onModify, onDelete, searchTerm }) {
         <div>
           <ListadoDisponibilidad
             ItemsDisponibles={items}
-            onModify={onModify}
+            onModify={handleShow}
             onDelete={onDelete}
             searchTerm={searchTerm}
           />
         </div>
       </main>
+
+      {/* Incluye el componente del modal */}
+      {selectedItem && (
+        <EditItemModal
+          show={showModal}
+          handleClose={handleClose}
+          item={selectedItem}
+          onSave={handleSave}
+        />
+      )}
     </Container>
   );
 }
