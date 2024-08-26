@@ -8,7 +8,8 @@ export default function Entrada({ onAddItem }) {
     descripcion: '',
     stock: '',
     categoria: '',
-    subcategoria: ''
+    subcategoria: '',
+    numeroOrden: '' // Nuevo campo añadido
   });
 
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function Entrada({ onAddItem }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.nombre && formData.descripcion && formData.stock && formData.categoria && formData.subcategoria) {
+    if (formData.nombre && formData.descripcion && formData.stock && formData.categoria && formData.subcategoria && formData.numeroOrden) {
       const newItem = {
         // El ID será asignado en App.jsx
         ...formData,
@@ -42,6 +43,19 @@ export default function Entrada({ onAddItem }) {
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col md={6}>
+            <Form.Group controlId="formNumeroOrden">
+              <Form.Label>N° Orden</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Número de orden"
+                name="numeroOrden"
+                value={formData.numeroOrden}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
             <Form.Group controlId="formNombre">
               <Form.Label>Nombre del Item</Form.Label>
               <Form.Control
@@ -54,6 +68,8 @@ export default function Entrada({ onAddItem }) {
               />
             </Form.Group>
           </Col>
+        </Row>
+        <Row>
           <Col md={6}>
             <Form.Group controlId="formDescripcion">
               <Form.Label>Descripción</Form.Label>
@@ -67,9 +83,7 @@ export default function Entrada({ onAddItem }) {
               />
             </Form.Group>
           </Col>
-        </Row>
-        <Row>
-          <Col md={4}>
+          <Col md={6}>
             <Form.Group controlId="formStock">
               <Form.Label>Stock</Form.Label>
               <Form.Control
@@ -82,7 +96,9 @@ export default function Entrada({ onAddItem }) {
               />
             </Form.Group>
           </Col>
-          <Col md={4}>
+        </Row>
+        <Row>
+          <Col md={6}>
             <Form.Group controlId="formCategoria">
               <Form.Label>Categoría</Form.Label>
               <Form.Control
@@ -95,7 +111,7 @@ export default function Entrada({ onAddItem }) {
               />
             </Form.Group>
           </Col>
-          <Col md={4}>
+          <Col md={6}>
             <Form.Group controlId="formSubcategoria">
               <Form.Label>Subcategoría</Form.Label>
               <Form.Control
@@ -110,7 +126,7 @@ export default function Entrada({ onAddItem }) {
           </Col>
         </Row>
         <Button variant="primary" type="submit" className="mt-3">
-          Agregar Item
+          Agregar Nuevo Item
         </Button>
       </Form>
     </div>
