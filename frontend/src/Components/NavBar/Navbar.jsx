@@ -21,7 +21,7 @@ function NavBar({ searchTerm, onSearchChange }) {
             width={100} // Ajusta el ancho del logo
             className="d-inline-block align-top"
           />{'  '}
-          <span className="brand-text">Corralón Municipal</span>
+          <span className="brand-text">Sistema de Inventario Municipal</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll">
           <span className="navbar-toggler-icon">
@@ -45,7 +45,7 @@ function NavBar({ searchTerm, onSearchChange }) {
               <NavDropdown.Item href="#action5">Personas</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Entrada" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Lista Entradas</NavDropdown.Item>
+              <NavDropdown.Item href="listaentradas">Lista Entradas</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/entrada">Nueva Entrada</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>

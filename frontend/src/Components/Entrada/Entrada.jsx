@@ -30,8 +30,8 @@ export default function Entrada({ onAddItem }) {
         ...formData,
         stock: parseInt(formData.stock, 10)
       };
-      onAddItem(newItem);
-      navigate('/');
+      onAddItem(newItem); // Registrar el nuevo ítem
+      navigate('/listaentradas'); // Redirigir a la lista de entradas
     } else {
       alert('Por favor, completa todos los campos.');
     }

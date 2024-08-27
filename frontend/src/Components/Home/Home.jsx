@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Nav, Button } from 'react-bootstrap';
-import { FaBox, FaBuilding, FaArrowDown, FaArrowUp, FaClipboardList, FaFileAlt, FaPlus, FaUserCheck,} from 'react-icons/fa';
+import { FaBox, FaBuilding, FaArrowDown, FaArrowUp, FaClipboardList, FaFileAlt, FaPlus, FaUserCheck } from 'react-icons/fa';
 import ListadoDisponibilidad from '../ListadoDisponibilidad/ListadoDisponibilidad.jsx';
 import EditItemModal from '../ModificarItem/ModificarItemModal.jsx';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import './Home.css';
 
 export default function Home({ items, onModify, onDelete, searchTerm }) {
@@ -63,7 +63,7 @@ export default function Home({ items, onModify, onDelete, searchTerm }) {
           </Nav.Link>
         </Nav>
       </aside>
-  
+
       <main className="main-content">
         <h1>Sistema de Stock General</h1>
         <div className='bottons-home'>
@@ -92,7 +92,6 @@ export default function Home({ items, onModify, onDelete, searchTerm }) {
         </div>
       </main>
 
-      {/* Incluye el componente del modal */}
       {selectedItem && (
         <EditItemModal
           show={showModal}
