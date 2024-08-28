@@ -6,7 +6,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Image from 'react-bootstrap/Image';
-import logo from './Logonav.png'; // Importa el logo desde la misma carpeta
+import logo from './Logonav.png';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
 
@@ -45,7 +45,7 @@ function NavBar({ searchTerm, onSearchChange }) {
               <NavDropdown.Item href="#action5">Personas</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Entrada" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="listaentradas">Lista Entradas</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="listaentradas">Lista Entradas</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/entrada">Nueva Entrada</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
@@ -57,8 +57,8 @@ function NavBar({ searchTerm, onSearchChange }) {
               <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Orden" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/ordencompra">Nueva Orden</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/listaordenes">Listado Ordenes</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
             </NavDropdown>

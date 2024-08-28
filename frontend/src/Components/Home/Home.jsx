@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Nav, Button } from 'react-bootstrap';
 import { FaBox, FaBuilding, FaArrowDown, FaArrowUp, FaClipboardList, FaFileAlt, FaPlus, FaUserCheck } from 'react-icons/fa';
 import ListadoDisponibilidad from '../ListadoDisponibilidad/ListadoDisponibilidad.jsx';
 import EditItemModal from '../ModificarItem/ModificarItemModal.jsx';
 import { Link } from 'react-router-dom';
 import './Home.css';
+import Loading from '../Loading/Loading.jsx';
 
 export default function Home({ items, onModify, onDelete, searchTerm }) {
+  const [cargando, setCargando] = useState(true); // Estado para el loading
   const [selectedItem, setSelectedItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    // Simulación de carga de datos
+    setCargando(true);
+    // Suponiendo que 'items' viene de una solicitud API en otro lado o props
+    setTimeout(() => {
+      setCargando(false); // Cambia el estado cuando los datos están listos
+    }, 1500); // Simulación de 2 segundos de carga, ajusta según la carga real
+  }, [items]);
 
   const handleShow = (item) => {
     setSelectedItem(item);
@@ -45,15 +56,15 @@ export default function Home({ items, onModify, onDelete, searchTerm }) {
         <Nav className="flex-column mt-3">
           <Nav.Link as={Link} to="/entrada">
             <FaArrowDown className="me-2" />
-            Entrada
+            Entradas
           </Nav.Link>
           <Nav.Link href="#salida">
             <FaArrowUp className="me-2" />
-            Salida
+            Salidas
           </Nav.Link>
-          <Nav.Link href="#orden">
+          <Nav.Link as={Link} to="/listaordenes">
             <FaClipboardList className="me-2" />
-            Orden
+            Ordenes
           </Nav.Link>
         </Nav>
         <Nav className="flex-column mt-3">
@@ -77,19 +88,25 @@ export default function Home({ items, onModify, onDelete, searchTerm }) {
             <FaPlus className='me-2' />
             Nueva Salida
           </Button>
-          <Button variant="primary" className='m-1'>
-            <FaPlus className='me-2' />
-            Nueva Orden
-          </Button>
+          <Link to="/ordencompra">
+            <Button variant="primary" className='m-1'>
+              <FaPlus className='me-2' />
+              Nueva orden
+            </Button>
+          </Link>
         </div>
-        <div>
+
+        {/* Mostrar Loading mientras se cargan los datos */}
+        {cargando ? (
+          <Loading />
+        ) : (
           <ListadoDisponibilidad
-            ItemsDisponibles={items}
+            Items={items}
             onModify={handleShow}
             onDelete={onDelete}
             searchTerm={searchTerm}
           />
-        </div>
+        )}
       </main>
 
       {selectedItem && (

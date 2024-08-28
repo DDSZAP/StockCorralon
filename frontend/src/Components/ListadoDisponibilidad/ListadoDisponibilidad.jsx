@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import { Table, Button } from "react-bootstrap";
 import { FaEdit, FaTrash, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 import './ListadoDisponibilidad.css';
 
-export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDelete, searchTerm }) {
-    const [sortConfig, setSortConfig] = React.useState({ key: null, direction: 'asc' });
+export default function ListadoDisponibilidad({ onModify, onDelete, searchTerm }) {
+    const [items, setItems] = useState([]);
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
+    useEffect(() => {
+        // Función para obtener los datos desde la API
+        const fetchItems = async () => {
+            try {
+                const response = await axios.get('http://10.0.0.17/stock-api/public/api/items');
+                setItems(response.data);
+            } catch (error) {
+                console.error('Error fetching items:', error);
+            }
+        };
+        fetchItems();
+    }, []);
+
+    // Función para filtrar items basados en el searchTerm
+    const filterItems = (items, searchTerm) => {
+        if (!searchTerm) return items;
+        return items.filter(item =>
+            item.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    };
+
+    const filteredItems = filterItems(items, searchTerm); // Filtra los items
+
+    // Usa filteredItems para la ordenación
     const sortedItems = React.useMemo(() => {
-        let sortableItems = [...ItemsDisponibles];
+        let sortableItems = [...filteredItems];
         if (sortConfig.key) {
             sortableItems.sort((a, b) => {
                 let aKey = a[sortConfig.key];
@@ -23,7 +50,7 @@ export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDe
             });
         }
         return sortableItems;
-    }, [ItemsDisponibles, sortConfig]);
+    }, [filteredItems, sortConfig]); // Usa filteredItems aquí
 
     const requestSort = (key) => {
         let direction = 'asc';
@@ -74,9 +101,9 @@ export default function ListadoDisponibilidad({ ItemsDisponibles, onModify, onDe
                             <td>{item.id}</td>
                             <td>{item.nombre}</td>
                             <td>{item.descripcion}</td>
-                            <td>{item.stock}</td>
-                            <td>{item.categoria}</td>
-                            <td>{item.subcategoria}</td>
+                            <td>{item.cantidad}</td>
+                            <td>{item.categoria?.nombre || 'Sin categoría'}</td>
+                            <td>{item.subcategoria?.nombre || 'Sin subcategoría'}</td>
                             <td>
                                 <Button 
                                     variant="warning" 

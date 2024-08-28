@@ -1,3 +1,4 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,6 +10,8 @@ import Item from './Components/Item/Item.jsx';
 import Entrada from './Components/Entrada/Entrada.jsx';
 import ListaEntradas from './Components/Entrada/ListaEntradas.jsx';
 import itemsData from '../src/Utils/itemsData.js';
+import ListaOrdenes from './Components/OrdenCompra/ListaOrdenes.jsx'
+import OrdenCompra from './Components/OrdenCompra/OrdenCompra.jsx'
 import { handleAddItem, handleDelete, handleModifyItem, filterItems } from '../src/Utils/Utils.js';
 
 export default function App() {
@@ -40,7 +43,7 @@ export default function App() {
     setSearchTerm(term);
   };
 
-  const filteredItems = filterItems(items, searchTerm);
+  const filteredItems = filterItems(items, searchTerm); // Aplicar filtro basado en el searchTerm
 
   return (
     <div className="App">
@@ -50,6 +53,8 @@ export default function App() {
         <Route exact path='/items' element={<Item />} />
         <Route exact path='/entrada' element={<Entrada onAddItem={onAddItem} />} />
         <Route exact path='/listaentradas' element={<ListaEntradas items={entradas} />} />
+        <Route path="/ordencompra" element={<OrdenCompra />} />
+        <Route path="/listaordenes" element={<ListaOrdenes />} />
       </Routes>
       <Footer />
     </div>
