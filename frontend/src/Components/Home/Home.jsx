@@ -1,3 +1,4 @@
+//home.jsx
 import React, { useEffect, useState } from 'react';
 import { Container, Nav, Button } from 'react-bootstrap';
 import { FaBox, FaBuilding, FaArrowDown, FaArrowUp, FaClipboardList, FaFileAlt, FaPlus, FaUserCheck } from 'react-icons/fa';
@@ -6,8 +7,10 @@ import EditItemModal from '../ModificarItem/ModificarItemModal.jsx';
 import { Link } from 'react-router-dom';
 import './Home.css';
 import Loading from '../Loading/Loading.jsx';
+import { handleModifyItem } from '../../Utils/Utils.js'; // Importa la función handleModifyItem
 
-export default function Home({ items, onModify, onDelete, searchTerm }) {
+export default function Home({ items, setItems, onDelete, searchTerm }) {
+  console.log({ items, setItems });
   const [cargando, setCargando] = useState(true); // Estado para el loading
   const [selectedItem, setSelectedItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -18,20 +21,22 @@ export default function Home({ items, onModify, onDelete, searchTerm }) {
     // Suponiendo que 'items' viene de una solicitud API en otro lado o props
     setTimeout(() => {
       setCargando(false); // Cambia el estado cuando los datos están listos
-    }, 1500); // Simulación de 2 segundos de carga, ajusta según la carga real
+    }, 1000); // Simulación de 1 segundos de carga, ajusta según la carga real
   }, [items]);
 
   const handleShow = (item) => {
     setSelectedItem(item);
     setShowModal(true);
-  };
+  };  
 
   const handleClose = () => {
     setShowModal(false);
   };
 
-  const handleSave = (updatedItem) => {
-    onModify(updatedItem);
+  // Manejar la acción de guardar después de modificar un item
+  const handleSave = async (updatedItem) => {
+    await handleModifyItem(items, setItems, updatedItem); // Actualiza tanto el estado local como la base de datos
+    setShowModal(false);
     setSelectedItem(null);
   };
 
@@ -101,7 +106,7 @@ export default function Home({ items, onModify, onDelete, searchTerm }) {
           <Loading />
         ) : (
           <ListadoDisponibilidad
-            Items={items}
+            items={items}
             onModify={handleShow}
             onDelete={onDelete}
             searchTerm={searchTerm}

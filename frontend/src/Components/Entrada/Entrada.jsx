@@ -9,7 +9,7 @@ export default function Entrada({ onAddItem }) {
     stock: '',
     categoria: '',
     subcategoria: '',
-    numeroOrden: '' // Nuevo campo añadido
+    numeroOrden: ''
   });
 
   const navigate = useNavigate();
