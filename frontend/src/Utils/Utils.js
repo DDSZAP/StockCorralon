@@ -1,5 +1,5 @@
+//utils.js
 import axios from 'axios';
-
 // URL base para la API
 const API_BASE_URL = 'http://10.0.0.17/stock-api/public/api/items';
 

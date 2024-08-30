@@ -8,12 +8,31 @@ import { Link } from 'react-router-dom';
 import './Home.css';
 import Loading from '../Loading/Loading.jsx';
 import { handleModifyItem } from '../../Utils/Utils.js'; // Importa la función handleModifyItem
+import axios from 'axios';
 
 export default function Home({ items, setItems, onDelete, searchTerm }) {
   console.log({ items, setItems });
   const [cargando, setCargando] = useState(true); // Estado para el loading
   const [selectedItem, setSelectedItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [categorias, SetCategorias] = useState([]);
+  const [subcategorias, SetSubcategorias] = useState([]);
+
+  useEffect(()=> {
+    const fetchCategoriesAndSubcategories = async () => {
+      try{
+        const [catResponse, subcatResponse] = await Promise.all([
+          axios.get('http://10.0.0.17/stock-api/public/api/categorias'),
+          axios.get('http://10.0.0.17/stock-api/public/api/subcategorias'),
+        ]);
+        SetCategorias(catResponse.data);
+        SetSubcategorias(subcatResponse.data);
+      } catch(error){
+        console.error('Error al cargar categorías y subcategorías', error);
+      }
+    };
+    fetchCategoriesAndSubcategories();
+  },[]);
 
   useEffect(() => {
     // Simulación de carga de datos
@@ -39,6 +58,8 @@ export default function Home({ items, setItems, onDelete, searchTerm }) {
     setShowModal(false);
     setSelectedItem(null);
   };
+
+
 
   return (
     <Container fluid className="grid-container">
@@ -120,6 +141,8 @@ export default function Home({ items, setItems, onDelete, searchTerm }) {
           handleClose={handleClose}
           item={selectedItem}
           onSave={handleSave}
+          categorias={categorias}
+          subcategorias={subcategorias}
         />
       )}
     </Container>

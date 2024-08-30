@@ -1,3 +1,4 @@
+//app.jsx
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -30,8 +31,7 @@ export default function App() {
       } catch (error) {
         console.error('Error al cargar los items:', error);
       }
-    };
-    
+    };    
     fetchItems();
   }, []); // Este efecto se ejecuta solo una vez cuando el componente se monta
 
