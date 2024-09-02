@@ -1,4 +1,3 @@
-//modificarItemModal.jsx
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
@@ -7,41 +6,65 @@ export default function ModificarItemModal({ show, handleClose, item, onSave, ca
   const [formData, setFormData] = useState({
     nombre: '',
     descripcion: '',
-    categoria_id:'',
-    subcategoria_id:''
+    categoria_id: '',
+    subcategoria_id: ''
   });
+  const [filteredSubcategorias, setFilteredSubcategorias] = useState([]);
 
+  // Cargar datos del item cuando se abre el modal
   useEffect(() => {
     if (item) {
       setFormData({
-        nombre: item.nombre,
-        descripcion: item.descripcion,
+        nombre: item.nombre || '',
+        descripcion: item.descripcion || '',
         categoria_id: item.categoria_id || '',
-        subcategoria_id: item.subcategoria_id || '',
-
+        subcategoria_id: item.subcategoria_id || ''
       });
     }
   }, [item]);
 
+  // Filtrar subcategorías cuando cambia la categoría seleccionada
+  useEffect(() => {
+    if (formData.categoria_id) {
+      const filtered = subcategorias.filter(subcat => subcat.categoria_id === parseInt(formData.categoria_id));
+      setFilteredSubcategorias(filtered);
+    } else {
+      setFilteredSubcategorias([]);
+    }
+  }, [formData.categoria_id, subcategorias]);
+
+  // Reiniciar subcategoría si la seleccionada no está en las filtradas
+  useEffect(() => {
+    if (
+      formData.subcategoria_id &&
+      !filteredSubcategorias.some(subcat => subcat.id === parseInt(formData.subcategoria_id))
+    ) {
+      setFormData(prevData => ({ ...prevData, subcategoria_id: '' }));
+    }
+  }, [filteredSubcategorias, formData.subcategoria_id]); // Agregar 'formData.subcategoria_id' como dependencia
+
   const handleInputChange = ({ target: { name, value } }) => {
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const updatedItem = { 
+      ...item, 
+      ...formData,
+      subcategoria_id: formData.subcategoria_id || '' 
+    };
+
     try {
-      const updatedItem = { ...item, ...formData };
       await axios.put(`http://10.0.0.17/stock-api/public/api/items/${item.id}`, updatedItem);
-      onSave(updatedItem);  // Callback para actualizar el estado principal en el componente padre
+      onSave(updatedItem);
       handleClose();
     } catch (error) {
       console.error('Error al modificar el item:', error.response ? error.response.data : error.message);
-      
       alert('Hubo un error al modificar el item. Por favor, intenta de nuevo.');
     }
   };
-
-  const filteredSubcategorias = subcategorias.filter(subcat => subcat.categoria_id === parseInt(formData.categoria_id))
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -95,6 +118,7 @@ export default function ModificarItemModal({ show, handleClose, item, onSave, ca
               value={formData.subcategoria_id}
               onChange={handleInputChange}
               required
+              //disabled={filteredSubcategorias.length === 0} // Deshabilitar si no hay subcategorías
             >
               <option value="">Selecciona una subcategoría</option>
               {filteredSubcategorias.map(subcategoria => (

@@ -11,7 +11,6 @@ import { handleModifyItem } from '../../Utils/Utils.js'; // Importa la función 
 import axios from 'axios';
 
 export default function Home({ items, setItems, onDelete, searchTerm }) {
-  console.log({ items, setItems });
   const [cargando, setCargando] = useState(true); // Estado para el loading
   const [selectedItem, setSelectedItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +39,7 @@ export default function Home({ items, setItems, onDelete, searchTerm }) {
     // Suponiendo que 'items' viene de una solicitud API en otro lado o props
     setTimeout(() => {
       setCargando(false); // Cambia el estado cuando los datos están listos
-    }, 1000); // Simulación de 1 segundos de carga, ajusta según la carga real
+    }, 1500); // Simulación de 1 segundos de carga, ajusta según la carga real
   }, [items]);
 
   const handleShow = (item) => {
@@ -59,12 +58,10 @@ export default function Home({ items, setItems, onDelete, searchTerm }) {
     setSelectedItem(null);
   };
 
-
-
   return (
     <Container fluid className="grid-container">
       <aside className="sidebar">
-        <h2 className='titulo-slidebar'>Home</h2>
+        <h2 className='titulo-slidebar'>Accesos rápidos</h2>
         <Nav className="flex-column">
           <Nav.Link as={Link} to="/items">
             <FaBox className="me-2" />

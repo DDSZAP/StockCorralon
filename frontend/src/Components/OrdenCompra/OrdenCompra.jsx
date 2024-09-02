@@ -1,16 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Col, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function OrdenCompra({ onAddOrden }) {
   const [formData, setFormData] = useState({
-    numeroOrden: '',
-    proveedor: '',
-    fecha: '',
-    items: [{ nombre: '', cantidad: '', precio: '' }]
+    item_id: '',
+    cantidad: '',
+    estado_id: '',
+    user_id: 5 // Este es un valor fijo; deberías ajustarlo según el contexto de usuario
   });
-
+ 
+  const [items, setItems] = useState([]);
+  const [estados, setEstados] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Obtener lista de ítems
+    axios.get('http://10.0.0.17/stock-api/public/api/items')
+      .then(response => setItems(response.data))
+      .catch(error => console.error('Error al obtener ítems:', error));
+
+    // Obtener lista de estados
+    axios.get('http://10.0.0.17/stock-api/public/api/ordenes-estado')
+      .then(response => setEstados(response.data))
+      .catch(error => console.error('Error al obtener estados:', error));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,36 +35,17 @@ export default function OrdenCompra({ onAddOrden }) {
     });
   };
 
-  const handleItemChange = (index, e) => {
-    const { name, value } = e.target;
-    const newItems = [...formData.items];
-    newItems[index] = { ...newItems[index], [name]: value };
-    setFormData({
-      ...formData,
-      items: newItems
-    });
-  };
-
-  const addItem = () => {
-    setFormData({
-      ...formData,
-      items: [...formData.items, { nombre: '', cantidad: '', precio: '' }]
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.numeroOrden && formData.proveedor && formData.fecha && formData.items.every(item => item.nombre && item.cantidad && item.precio)) {
-      const newOrden = {
-        ...formData,
-        items: formData.items.map(item => ({
-          ...item,
-          cantidad: parseInt(item.cantidad, 10),
-          precio: parseFloat(item.precio)
-        }))
-      };
-      onAddOrden(newOrden); // Registrar la nueva orden
-      navigate('/listaordenes'); // Redirigir a la lista de órdenes
+    if (formData.item_id && formData.cantidad && formData.estado_id) {
+      try {
+        await axios.post('http://10.0.0.17/stock-api/public/api/ordenes', formData);
+        onAddOrden(formData); // Registrar la nueva orden
+        navigate('/listaordenes'); // Redirigir a la lista de órdenes
+      } catch (error) {
+        console.error('Error al crear la orden:', error.response ? error.response.data : error.message);
+        alert('Hubo un error al crear la orden. Por favor, intenta de nuevo.');
+      }
     } else {
       alert('Por favor, completa todos los campos.');
     }
@@ -61,26 +57,32 @@ export default function OrdenCompra({ onAddOrden }) {
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col md={6}>
-            <Form.Group controlId="formNumeroOrden">
-              <Form.Label>Número de Orden (Mesa de entrada)</Form.Label>
+            <Form.Group controlId="formItemId">
+              <Form.Label>Ítem</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Número de orden"
-                name="numeroOrden"
-                value={formData.numeroOrden}
+                as="select"
+                name="item_id"
+                value={formData.item_id}
                 onChange={handleChange}
                 required
-              />
+              >
+                <option value="">Selecciona un ítem</option>
+                {items.map(item => (
+                  <option key={item.id} value={item.id}>
+                    {item.nombre}
+                  </option>
+                ))}
+              </Form.Control>
             </Form.Group>
           </Col>
           <Col md={6}>
-            <Form.Group controlId="formProveedor">
-              <Form.Label>Proveedor</Form.Label>
+            <Form.Group controlId="formCantidad">
+              <Form.Label>Cantidad</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Proveedor"
-                name="proveedor"
-                value={formData.proveedor}
+                type="number"
+                placeholder="Cantidad"
+                name="cantidad"
+                value={formData.cantidad}
                 onChange={handleChange}
                 required
               />
@@ -89,67 +91,26 @@ export default function OrdenCompra({ onAddOrden }) {
         </Row>
         <Row>
           <Col md={6}>
-            <Form.Group controlId="formFecha">
-              <Form.Label>Fecha</Form.Label>
+            <Form.Group controlId="formEstadoId">
+              <Form.Label>Estado de la Orden</Form.Label>
               <Form.Control
-                type="date"
-                placeholder="Fecha"
-                name="fecha"
-                value={formData.fecha}
+                as="select"
+                name="estado_id"
+                value={formData.estado_id}
                 onChange={handleChange}
                 required
-              />
+              >
+                <option value="">Selecciona un estado</option>
+                {estados.map(estado => (
+                  <option key={estado.id} value={estado.id}>
+                    {estado.nombre}
+                  </option>
+                ))}
+              </Form.Control>
             </Form.Group>
           </Col>
         </Row>
-        <h4>Items</h4>
-        {formData.items.map((item, index) => (
-          <Row key={index}>
-            <Col md={4}>
-              <Form.Group controlId={`formNombreItem-${index}`}>
-                <Form.Label>Nombre</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nombre del ítem"
-                  name="nombre"
-                  value={item.nombre}
-                  onChange={(e) => handleItemChange(index, e)}
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md={4}>
-              <Form.Group controlId={`formCantidadItem-${index}`}>
-                <Form.Label>Cantidad</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Cantidad"
-                  name="cantidad"
-                  value={item.cantidad}
-                  onChange={(e) => handleItemChange(index, e)}
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md={4}>
-              <Form.Group controlId={`formPrecioItem-${index}`}>
-                <Form.Label>Precio</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Precio"
-                  name="precio"
-                  value={item.precio}
-                  onChange={(e) => handleItemChange(index, e)}
-                  required
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-        ))}
-        <Button variant="secondary" className="mt-3" onClick={addItem}>
-          Agregar Ítem
-        </Button>
-        <Button variant="primary" type="submit" className="mt-3 ms-2">
+        <Button variant="primary" type="submit" className="mt-3">
           Crear Orden de Compra
         </Button>
       </Form>

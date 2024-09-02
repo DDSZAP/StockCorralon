@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './Components/NavBar/Navbar.jsx';
+import Login from './Components/Login/Login.jsx'
 import Home from './Components/Home/Home.jsx';
 import Footer from './Components/Footer/Footer.jsx';
 import { Route, Routes } from 'react-router-dom';
@@ -13,6 +14,8 @@ import ListaOrdenes from './Components/OrdenCompra/ListaOrdenes.jsx';
 import OrdenCompra from './Components/OrdenCompra/OrdenCompra.jsx';
 import { handleAddItem, handleDelete, handleModifyItem, filterItems } from '../src/Utils/Utils.js';
 import axios from 'axios';
+import { AuthProvider } from './Context/AuthContext.jsx'
+import PrivateRoute from './Components/PrivateRoute/PrivateRoute.js';
 
 export default function App() {
   const [items, setItems] = useState([]); // Estado inicial vacío para items
@@ -60,21 +63,75 @@ export default function App() {
   const filteredItems = filterItems(items, searchTerm); // Aplicar filtro basado en el searchTerm
 
   return (
-    <div className="App">
-      <NavBar searchTerm={searchTerm} onSearchChange={handleSearchChange} />
-      <Routes>
-        <Route
-          exact
-          path='/'
-          element={<Home items={filteredItems} setItems={setItems} onModify={onModifyItem} onDelete={onDelete} searchTerm={searchTerm} />}
-        />
-        <Route exact path='/items' element={<Item />} />
-        <Route exact path='/entrada' element={<Entrada onAddItem={onAddItem} />} />
-        <Route exact path='/listaentradas' element={<ListaEntradas items={entradas} />} />
-        <Route path='/ordencompra' element={<OrdenCompra />} />
-        <Route path='/listaordenes' element={<ListaOrdenes />} />
-      </Routes>
-      <Footer />
-    </div>
+    <AuthProvider>
+      <div className="App">
+        <NavBar searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+        <Routes>
+          {/* Ruta pública para el login */}
+          <Route exact path='/login' element={<Login />} />
+          
+          {/* Rutas protegidas */}
+          <Route
+            exact
+            path='/'
+            element={
+              <PrivateRoute>
+                <Home
+                  items={filteredItems}
+                  setItems={setItems}
+                  onModify={onModifyItem}
+                  onDelete={onDelete}
+                  searchTerm={searchTerm}
+                />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path='/items'
+            element={
+              <PrivateRoute>
+                <Item />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path='/entrada'
+            element={
+              <PrivateRoute>
+                <Entrada onAddItem={onAddItem} />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path='/listaentradas'
+            element={
+              <PrivateRoute>
+                <ListaEntradas items={entradas} />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/ordencompra'
+            element={
+              <PrivateRoute>
+                <OrdenCompra />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/listaordenes'
+            element={
+              <PrivateRoute>
+                <ListaOrdenes />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+        <Footer />
+      </div>
+    </AuthProvider>
   );
 }

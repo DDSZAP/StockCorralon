@@ -13,12 +13,13 @@
 }
 
 .titulo-slidebar{
-  font-size: 1.5em;
+  font-size: 1.2em;
 }
 
 .sidebar .nav-link {
   color: var(--dark-color) !important; /* Cambia el color de los enlaces a negro */
-  font-size: 1.15em;
+  font-size: 1 em;
+  font-weight: 500;
   padding: 10px 15px; /* Añade algo de padding para mejorar la usabilidad */
   transition: background-color 0.3s ease, color 0.3s ease; /* Transiciones suaves */
 }

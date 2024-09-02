@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react'; // Importa useContext
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -9,16 +9,19 @@ import Image from 'react-bootstrap/Image';
 import logo from './Logonav.png';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../Context/AuthContext'; // Importa AuthContext
 
 function NavBar({ searchTerm, onSearchChange }) {
+  const { logout } = useContext(AuthContext); // Obtén la función de logout desde el contexto
+
   return (
     <Navbar expand="lg" className='navbar'>
       <Container fluid>
         <Navbar.Brand as={Link} to="/">
           <Image
-            src={logo} // Utiliza la ruta relativa del logo importado
+            src={logo}
             alt="Logo"
-            width={100} // Ajusta el ancho del logo
+            width={100}
             className="d-inline-block align-top"
           />{'  '}
           <span className="brand-text">Sistema de Inventario Municipal</span>
@@ -31,11 +34,7 @@ function NavBar({ searchTerm, onSearchChange }) {
           </span>
         </Navbar.Toggle>
         <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
-            navbarScroll
-          >
+          <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <NavDropdown title="Items" id="navbarScrollingDropdown">
               <NavDropdown.Item as={Link} to="/Items">Lista Items</NavDropdown.Item>
@@ -66,7 +65,8 @@ function NavBar({ searchTerm, onSearchChange }) {
               <NavDropdown.Item href="#action3">Perfil</NavDropdown.Item>
               <NavDropdown.Item href="#action4">Configuración</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">Cerrar Sesión</NavDropdown.Item>
+              {/* Añade el handler de logout en el item de Cerrar Sesión */}
+              <NavDropdown.Item onClick={logout}>Cerrar Sesión</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Form className="d-flex">
