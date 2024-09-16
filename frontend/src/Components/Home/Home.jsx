@@ -17,21 +17,35 @@ export default function Home({ items, setItems, onDelete, searchTerm }) {
   const [categorias, SetCategorias] = useState([]);
   const [subcategorias, SetSubcategorias] = useState([]);
 
-  useEffect(()=> {
+  useEffect(() => {
     const fetchCategoriesAndSubcategories = async () => {
-      try{
+      try {
+        const token = localStorage.getItem('token');  // Obtener el token de autenticación del localStorage
+  
+        // Realizar ambas solicitudes GET con el encabezado de autorización
         const [catResponse, subcatResponse] = await Promise.all([
-          axios.get('http://10.0.0.17/stock-api/public/api/categorias'),
-          axios.get('http://10.0.0.17/stock-api/public/api/subcategorias'),
+          axios.get('http://10.0.0.17/stock-api/public/api/categorias', {
+            headers: {
+              Authorization: `Bearer ${token}`,  // Añadir el token en el encabezado de la solicitud
+            },
+          }),
+          axios.get('http://10.0.0.17/stock-api/public/api/subcategorias', {
+            headers: {
+              Authorization: `Bearer ${token}`,  // Añadir el token en el encabezado de la solicitud
+            },
+          }),
         ]);
-        SetCategorias(catResponse.data);
-        SetSubcategorias(subcatResponse.data);
-      } catch(error){
+  
+        SetCategorias(catResponse.data);  // Establecer categorías
+        SetSubcategorias(subcatResponse.data);  // Establecer subcategorías
+      } catch (error) {
         console.error('Error al cargar categorías y subcategorías', error);
       }
     };
-    fetchCategoriesAndSubcategories();
-  },[]);
+  
+    fetchCategoriesAndSubcategories();  // Llamar a la función para cargar datos
+  }, []);
+  
 
   useEffect(() => {
     // Simulación de carga de datos

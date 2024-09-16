@@ -12,8 +12,20 @@ export default function ListadoDisponibilidad({ onModify, searchTerm }) {
     // Función para obtener los datos desde la API
     const fetchItems = async () => {
       try {
+        const token = localStorage.getItem('token'); // Obtener el token de autenticación del localStorage
+
+        if (!token) {
+          console.error('No hay token disponible');
+          return;
+        }
+
         const response = await axios.get(
-          "http://10.0.0.17/stock-api/public/api/items"
+          "http://10.0.0.17/stock-api/public/api/items",
+          {
+            headers: {
+              Authorization: `Bearer ${token}` // Añadir el token en el encabezado de la solicitud
+            }
+          }
         );
         setItems(response.data);
       } catch (error) {
@@ -26,8 +38,19 @@ export default function ListadoDisponibilidad({ onModify, searchTerm }) {
   // Función para eliminar un item
   const onDelete = async (id) => {
     try {
-      // Realiza la solicitud DELETE a la ruta correspondiente
-      await axios.delete(`http://10.0.0.17/stock-api/public/api/items/${id}`);
+      const token = localStorage.getItem('token'); // Obtener el token de autenticación del localStorage
+
+      if (!token) {
+        console.error('No hay token disponible');
+        return;
+      }
+
+      // Realiza la solicitud DELETE a la ruta correspondiente con el token en el encabezado
+      await axios.delete(`http://10.0.0.17/stock-api/public/api/items/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Añadir el token en el encabezado de la solicitud
+        }
+      });
       // Filtra los items eliminando el que fue borrado
       setItems((prevItems) => prevItems.filter((item) => item.id !== id));
       alert("Item eliminado exitosamente.");

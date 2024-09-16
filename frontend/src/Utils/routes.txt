@@ -26,7 +26,7 @@
   GET|HEAD        api/subcategorias/{id} ............................ subcategorias.show › SubcategoriaController@show
   PUT|PATCH       api/subcategorias/{id} ........................ subcategorias.update › SubcategoriaController@update
   DELETE          api/subcategorias/{id} ...................... subcategorias.destroy › SubcategoriaController@destroy
-  GET|HEAD        api/user ...........................................................................................
+  GET|HEAD        api/users ..........................................................................................
   GET|HEAD        routes ............................................................................ RoutesController
                                                                                                    Showing [28] routes
 """ // app\Http\Controllers\RoutesController.php:30
